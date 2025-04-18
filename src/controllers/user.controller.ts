@@ -1,4 +1,5 @@
 import db from '@/db';
+import { Request, Response } from 'express';
 import { users } from '@/db/schema';
 import asyncHandler from '@/utils/asyncHandler';
 import { isUserExist } from '@/utils/db';
@@ -6,7 +7,7 @@ import { generateToken } from '@/utils/jwt';
 import { userCreateSchema, userLoginSchema } from '@/utils/validators';
 import { eq } from 'drizzle-orm';
 
-export const registerUser = asyncHandler(async (req, res) => {
+export const registerUser = asyncHandler(async (req: Request, res: Response) => {
     const data = userCreateSchema.parse(req.body);
 
     const userExists = await isUserExist(data.email);
@@ -36,7 +37,7 @@ export const registerUser = asyncHandler(async (req, res) => {
     return res.status(201).json({ success: true, message: 'User created', data: user });
 });
 
-export const loginUser = asyncHandler(async (req, res) => {
+export const loginUser = asyncHandler(async (req: Request, res: Response) => {
     const data = userLoginSchema.parse(req.body);
 
     const [user] = await db.select().from(users).where(eq(users.email, data.email));

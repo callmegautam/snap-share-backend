@@ -22,7 +22,9 @@ app.get('/', (_: Request, res: Response) => {
 });
 
 import userRoute from '@/routes/user.route';
+import photoRoute from '@/routes/photo.route';
 app.use('/api/v1/user', userRoute);
+app.use('/api/v1/photo', photoRoute);
 
 app.use('*', (_: Request, res: Response) => {
     res.status(404).send('Not found');
