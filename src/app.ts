@@ -21,6 +21,9 @@ app.get('/', (_: Request, res: Response) => {
     res.send('Backend is running');
 });
 
+import userRoute from '@/routes/user.route';
+app.use('/api/v1/user', userRoute);
+
 app.use('*', (_: Request, res: Response) => {
     res.status(404).send('Not found');
 });
