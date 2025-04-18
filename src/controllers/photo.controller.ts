@@ -1,10 +1,8 @@
 import db from '@/db';
 import { Request, Response } from 'express';
-import { photos, users } from '@/db/schema';
+import { photos } from '@/db/schema';
 import asyncHandler from '@/utils/asyncHandler';
-import { isUserExist } from '@/utils/db';
-import { generateToken } from '@/utils/jwt';
-import { photoCreateSchema, userCreateSchema, userLoginSchema } from '@/utils/validators';
+import { photoCreateSchema } from '@/utils/validators';
 import { eq } from 'drizzle-orm';
 
 export const uploadPhoto = asyncHandler(async (req: Request, res: Response) => {
