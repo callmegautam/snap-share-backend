@@ -1,6 +1,6 @@
 import db from '@/db';
 import { Request, Response } from 'express';
-import { users } from '@/db/schema';
+import { photos, users } from '@/db/schema';
 import asyncHandler from '@/utils/asyncHandler';
 import { isUserExist } from '@/utils/db';
 import { generateToken } from '@/utils/jwt';
@@ -59,4 +59,27 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
             message: 'Login successful',
             data: { id: user.id, email: user.email, token },
         });
+});
+
+export const getPhotosByUserId = asyncHandler(async (req: Request, res: Response) => {
+    const userId = Number(req.params.userId);
+    if (isNaN(userId)) {
+        return res.status(400).json({ success: false, message: 'Invalid user id', data: null });
+    }
+
+    const allPhotos = await db
+        .select({
+            id: photos.id,
+            caption: photos.caption,
+            tags: photos.tags,
+            photoUrl: photos.photoUrl,
+        })
+        .from(photos)
+        .where(eq(photos.userId, userId));
+
+    if (allPhotos.length === 0) {
+        return res.status(400).json({ success: false, message: 'No photos found', data: null });
+    }
+
+    return res.status(200).json({ success: true, message: 'Photos found', data: allPhotos });
 });
