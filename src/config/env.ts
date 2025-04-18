@@ -12,6 +12,10 @@ const envSchema = z.object({
     JWT_SECRET: z.string(),
     JWT_EXPIRY: z.string(),
     NODE_ENV: z.enum(['development', 'production']).optional(),
+
+    AZURE_STORAGE_ACCOUNT_NAME: z.string().optional(),
+    AZURE_STORAGE_ACCOUNT_KEY: z.string().optional(),
+    AZURE_STORAGE_CONTAINER_NAME: z.string().optional(),
 });
 
 export default envSchema.parse(process.env);

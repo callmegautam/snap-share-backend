@@ -10,7 +10,12 @@ const app = express();
 const isProduction = env.NODE_ENV === 'production';
 const httpLoggerMode = isProduction ? 'combined' : 'dev';
 
-app.use(cors());
+app.use(
+    cors({
+        origin: 'http://localhost:8080',
+        credentials: true,
+    })
+);
 app.use(cookieParser());
 app.use(morgan(httpLoggerMode));
 app.use(express.json());

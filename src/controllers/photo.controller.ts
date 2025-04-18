@@ -4,6 +4,7 @@ import { photos } from '@/db/schema';
 import asyncHandler from '@/utils/asyncHandler';
 import { photoCreateSchema } from '@/utils/validators';
 import { eq } from 'drizzle-orm';
+import { generateUploadSasUrl } from '@/utils/fileUpload';
 
 export const uploadPhoto = asyncHandler(async (req: Request, res: Response) => {
     const data = photoCreateSchema.parse(req.body);
@@ -38,7 +39,9 @@ export const getPhotoById = asyncHandler(async (req: Request, res: Response) => 
         return res.status(400).json({ success: false, message: 'Photo not found', data: null });
     }
 
-    return res.status(200).json({ success: true, message: 'Photo found', data: photo });
+    const photoData = { ...photo, tags: photo?.tags ? photo?.tags.split(',') : [] };
+
+    return res.status(200).json({ success: true, message: 'Photo found', data: photoData });
 });
 
 export const getAllPhotos = asyncHandler(async (req: Request, res: Response) => {
@@ -49,4 +52,27 @@ export const getAllPhotos = asyncHandler(async (req: Request, res: Response) => 
     }
 
     return res.status(200).json({ success: true, message: 'Photos found', data: allPhotos });
+});
+
+export const getUploadSasUrl = asyncHandler(async (req: Request, res: Response) => {
+    const userId = Number(res.locals.user.id);
+
+    if (isNaN(userId)) {
+        return res.status(400).json({ success: false, message: 'Invalid user id', data: null });
+    }
+
+    const fileName = `${userId}-${Date.now()}.jpg`;
+    let sasUrl = '';
+
+    try {
+        sasUrl = await generateUploadSasUrl(fileName);
+    } catch (error) {
+        console.log(`Error generating sas url -> ${error}`);
+    }
+
+    if (sasUrl.length === 0) {
+        return res.status(400).json({ success: false, message: 'Sas url not generated', data: null });
+    }
+
+    return res.status(200).json({ success: true, message: 'Sas url generated', data: sasUrl });
 });

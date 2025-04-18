@@ -7,8 +7,15 @@ import { generateToken } from '@/utils/jwt';
 import { userCreateSchema, userLoginSchema } from '@/utils/validators';
 import { eq } from 'drizzle-orm';
 
+// create /me controller which will return authorization = true
+
+export const me = asyncHandler(async (req: Request, res: Response) => {
+    return res.status(200).json({ success: true, message: 'Authorized', data: { authorization: true } });
+});
+
 export const registerUser = asyncHandler(async (req: Request, res: Response) => {
     const data = userCreateSchema.parse(req.body);
+    console.log(data);
 
     const userExists = await isUserExist(data.email);
 
@@ -39,6 +46,7 @@ export const registerUser = asyncHandler(async (req: Request, res: Response) => 
 
 export const loginUser = asyncHandler(async (req: Request, res: Response) => {
     const data = userLoginSchema.parse(req.body);
+    console.log(`login user -> ${data.email}`);
 
     const [user] = await db.select().from(users).where(eq(users.email, data.email));
 
