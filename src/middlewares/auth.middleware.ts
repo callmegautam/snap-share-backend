@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 
 export const isLogin = (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies.authorization;
+    console.log(req.url, token);
     if (!token) {
         return res.status(401).json({ success: false, message: 'Unauthorized', data: null });
     }

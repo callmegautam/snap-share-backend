@@ -28,7 +28,7 @@ export async function generateUploadSasUrl(fileName: string, expiresInMinutes = 
         {
             containerName,
             blobName: fileName,
-            permissions: BlobSASPermissions.parse('cw'), // Create and Write permissions
+            permissions: BlobSASPermissions.parse('cwa'), // Create and Write permissions
             expiresOn: expiryDate,
         },
         sharedKeyCredential
