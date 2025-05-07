@@ -1,3 +1,6 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
 import { drizzle } from 'drizzle-orm/mysql2';
 import { ConnectionOptions, createPool } from 'mysql2/promise';
 import * as schema from '@/db/schema';
@@ -9,6 +12,9 @@ const connectionOptions: ConnectionOptions = {
     user: env.DB_USER,
     password: env.DB_PASSWORD,
     database: env.DB_DATABASE,
+    ssl: {
+        ca: fs.readFileSync(path.join(process.cwd(), './cert/DigiCertGlobalRootCA.crt.pem'), 'utf8'),
+    },
 };
 
 export const connection = createPool(connectionOptions);

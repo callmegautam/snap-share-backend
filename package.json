@@ -5,7 +5,8 @@
     "main": "index.js",
     "scripts": {
         "dev": "tsx --watch -r dotenv/config src/index.ts",
-        "build": "tsx -r dotenv/config src/index.ts",
+        "start": "node -r dotenv/config build/src/index.js",
+        "build": "tsc --noCheck && tsc-alias",
         "db:push": "drizzle-kit push"
     },
     "keywords": [],
@@ -20,9 +21,9 @@
         "@types/morgan": "^1.9.9",
         "@types/node": "^22.14.1",
         "drizzle-kit": "^0.31.0",
-        "ts-alias": "^0.0.7",
-        "tsx": "^4.19.3",
-        "typescript": "^5.8.3"
+        "tsc-alias": "^1.8.10",
+        "tsx": "^4.19.2",
+        "typescript": "^5.7.2"
     },
     "dependencies": {
         "@azure/storage-blob": "^12.27.0",
